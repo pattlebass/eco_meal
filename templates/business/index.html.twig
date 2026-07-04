@@ -29,7 +29,7 @@
                 <th>Street</th>
                 <th>House No</th>
                 <th>Phone</th>
-                <th>Type</th>
+                <th><a href="{{ path('app_business_type') }}">Type</a></th>
             </tr>
             </thead>
             <tbody>
@@ -41,7 +41,7 @@
                     <td>{{ business.street }}</td>
                     <td>{{ business.houseNumber }}</td>
                     <td>{{ business.phoneNumber }}</td>
-                    <td>{{ business.businessType.name }}</td>
+                    <td><a href="{{ path('app_business_type_view', {id: business.businessType.id}) }}">{{ business.businessType.name }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>
