@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Business;
+use App\Entity\Package;
 use App\Form\BusinessFormType;
+use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,12 +25,20 @@ final class BusinessController extends AbstractController
         ]);
     }
 
-    #[Route('/business/{id}', name: 'app_business_view')]
+    #[Route('/business/{id}', name: 'app_business_view', methods: ['GET'])]
     public function view(Business $business): Response
     {
         return $this->render('business/view.html.twig', [
             'business' => $business,
         ]);
+    }
+
+    #[Route('/business/{id}', name: 'app_business_delete', methods: ['POST'])]
+    public function delete(Business $business, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($business);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_business');
     }
 
     #[Route('/new/business', name: 'app_business_new', methods: ['GET', 'POST'])]
@@ -48,4 +58,60 @@ final class BusinessController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('/update/business/{id}', name: 'app_business_update', methods: ['GET', 'POST'])]
+    public function update(Business $business, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(BusinessFormType::class, $business);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($business);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_business');
+        }
+
+        return $this->render('business/update.html.twig', [
+            'form' => $form
+        ]);
+    }
+    #[Route('/business/{id}/new-package', name: 'app_business_new_package', methods: ['GET', 'POST'])]
+    public function newPackage(Business $business, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $package = new Package();
+        $package->setBusiness($business);
+        $package->setCreatedAt(new \DateTimeImmutable());
+        $form = $this->createForm(PackageFormType::class, $package);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($package);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_package');
+        }
+
+        return $this->render('package/new.html.twig', [
+            'form' => $form
+        ]);
+    }
+
+    #[Route('/business/{id}/update-package/{packageId}', name: 'app_business_update_package', methods: ['GET', 'POST'])]
+    public function updatePackage(Business $business, int $packageId, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $package = $entityManager->getRepository(Package::class)->find($packageId);
+        $package->setCreatedAt(new \DateTimeImmutable());
+        $form = $this->createForm(PackageFormType::class, $package);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($package);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_business_view', ['id' => $business->getId()]);
+        }
+
+        return $this->render('package/update.html.twig', [
+            'form' => $form
+        ]);
+    }
+
 }

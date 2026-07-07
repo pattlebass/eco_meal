@@ -1,50 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BusinessController!{% endblock %}
+{% block title %}Businesses{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
-
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
-
-    <a href="{{ path('app_business_new') }}">Create new</a>
-
-    <div class="example-wrapper">
-        <table>
-            <thead>
+<main class="container mt-4" style="max-width: 800px;">
+    <h1>Businesses</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Street</th>
+            <th>House No</th>
+            <th>Phone</th>
+            <th><a href="{{ path('app_business_type') }}">Type</a></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for business in businesses %}
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>City</th>
-                <th>Street</th>
-                <th>House No</th>
-                <th>Phone</th>
-                <th><a href="{{ path('app_business_type') }}">Type</a></th>
+                <td>{{ business.id }}</td>
+                <td><a href="{{ path('app_business_view', {id: business.id}) }}">{{ business.name }}</a></td>
+                <td>{{ business.city }}</td>
+                <td>{{ business.street }}</td>
+                <td>{{ business.houseNumber }}</td>
+                <td>{{ business.phoneNumber }}</td>
+                <td><a href="{{ path('app_business_type_view', {id: business.businessType.id}) }}">{{ business.businessType.name }}</a></td>
             </tr>
-            </thead>
-            <tbody>
-            {% for business in businesses %}
-                <tr>
-                    <td><a href="{{ path('app_business_view', {id: business.id}) }}">{{ business.id }}</a></td>
-                    <td>{{ business.name }}</td>
-                    <td>{{ business.city }}</td>
-                    <td>{{ business.street }}</td>
-                    <td>{{ business.houseNumber }}</td>
-                    <td>{{ business.phoneNumber }}</td>
-                    <td><a href="{{ path('app_business_type_view', {id: business.businessType.id}) }}">{{ business.businessType.name }}</a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_business_new') }}" class="btn btn-primary">New business</a>
+</main>
 {% endblock %}
