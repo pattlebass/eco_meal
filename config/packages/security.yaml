@@ -44,7 +44,7 @@ security:
          - { path: ^/order, roles: [ ROLE_ADMIN ] }
          - { path: ^/package/\d+/new-order$, roles: [ ROLE_CONSUMER ] }
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_USER, ROLE_BUSINESS]
+        ROLE_ADMIN: [ROLE_BUSINESS]
 
 when@test:
     security:

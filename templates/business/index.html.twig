@@ -3,36 +3,40 @@
 {% block title %}Businesses{% endblock %}
 
 {% block body %}
-<main class="container mt-4" style="max-width: 800px;">
-    <h1>Businesses</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>City</th>
-            <th>Street</th>
-            <th>House No</th>
-            <th>Phone</th>
-            <th><a href="{{ path('app_business_type') }}">Type</a></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for business in businesses %}
-            <tr>
-                <td>{{ business.id }}</td>
-                <td><a href="{{ path('app_business_view', {id: business.id}) }}">{{ business.name }}</a></td>
-                <td>{{ business.city }}</td>
-                <td>{{ business.street }}</td>
-                <td>{{ business.houseNumber }}</td>
-                <td>{{ business.phoneNumber }}</td>
-                <td><a href="{{ path('app_business_type_view', {id: business.businessType.id}) }}">{{ business.businessType.name }}</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% if is_granted("ROLE_ADMIN") %}
-        <a href="{{ path('app_business_new') }}" class="btn btn-primary">New business</a>
-    {% endif %}
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1>Businesses</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Street</th>
+                    <th>House No</th>
+                    <th>Phone</th>
+                    <th><a href="{{ path('app_business_type') }}">Type</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for business in businesses %}
+                    <tr>
+                        <td>{{ business.id }}</td>
+                        <td><a href="{{ path('app_business_view', {id: business.id}) }}">{{ business.name }}</a></td>
+                        <td>{{ business.city }}</td>
+                        <td>{{ business.street }}</td>
+                        <td>{{ business.houseNumber }}</td>
+                        <td>{{ business.phoneNumber }}</td>
+                        <td><a href="{{ path('app_business_type_view', {id: business.businessType.id}) }}">{{ business.businessType.name }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_granted("ROLE_ADMIN") %}
+                <a href="{{ path('app_business_new') }}" class="btn btn-primary">New business</a>
+            {% endif %}
+        </div>
+    </div>
 </main>
 {% endblock %}
