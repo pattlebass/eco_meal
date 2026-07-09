@@ -16,6 +16,15 @@ class PackageRepository extends ServiceEntityRepository
         parent::__construct($registry, Package::class);
     }
 
+    public function findAvailablePackages(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.consumer_order', 'o')
+            ->where('o.id IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Package[] Returns an array of Package objects
 //     */

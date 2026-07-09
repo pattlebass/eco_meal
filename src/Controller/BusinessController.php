@@ -36,6 +36,12 @@ final class BusinessController extends AbstractController
     #[Route('/business/{id}', name: 'app_business_delete', methods: ['POST'])]
     public function delete(Business $business, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted("ROLE_ADMIN");
+        $user = $this->getUser();
+        if (!($business->getUser()->getId() == $user->getId() || $this->isGranted("ROLE_ADMIN")))
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager->remove($business);
         $entityManager->flush();
         return $this->redirectToRoute('app_business');

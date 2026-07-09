@@ -26,8 +26,10 @@
                 </tr>
             </table>
 
-            <a class="btn btn-secondary" href="{{ path('app_business_update', {id: business.id}) }}">Update</a>
-            <button class="btn btn-danger" onclick="deleteBusiness()">Delete</button>
+            {% if is_granted('ROLE_ADMIN')%}
+                <a class="btn btn-secondary" href="{{ path('app_business_update', {id: business.id}) }}">Update</a>
+                <button class="btn btn-danger" onclick="deleteBusiness()">Delete</button>
+            {% endif %}
         </div>
         <div class="col">
             <div class="d-flex gap-4 align-items-center">
@@ -39,8 +41,11 @@
                     <li class="list-group-item">
                         <div class="d-flex gap-2 align-items-center">
                             <a href="{{ path('app_package_view', {id: package.id}) }}" class="flex-fill">{{ package.name }}</a>
-                            <a href="{{ path('app_business_update_package', {id: business.id, packageId: package.id}) }}" class="btn btn-secondary">Update</a>
-                            <button onclick="deletePackage('{{ path('app_package_delete', {id: package.id}) }}')" class="btn btn-danger">Delete</button>
+
+                            {% if app.user.id == business.user.id or is_granted('ROLE_ADMIN')%}
+                                <a href="{{ path('app_business_update_package', {id: business.id, packageId: package.id}) }}" class="btn btn-secondary">Update</a>
+                                <button onclick="deletePackage('{{ path('app_package_delete', {id: package.id}) }}')" class="btn btn-danger">Delete</button>
+                            {% endif %}
                         </div>
                     </li>
                 {% endfor %}

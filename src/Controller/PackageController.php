@@ -20,7 +20,7 @@ final class PackageController extends AbstractController
     #[Route('/package', name: 'app_package')]
     public function index(PackageRepository $packageRepository): Response
     {
-        $packages = $packageRepository->findAll();
+        $packages = $packageRepository->findAvailablePackages();
         return $this->render('package/index.html.twig', [
             'packages' => $packages,
         ]);

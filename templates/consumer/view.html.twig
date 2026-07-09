@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hi, {{ consumer.firstName }}{% endblock %}
+
+{% block body %}
+
+<main class="container mt-4" style="max-width: 800px">
+    <div class="row">
+        <div class="col">
+            <h1>Hi, {{ consumer.firstName }}</h1>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2>Information</h2>
+            <table class="table">
+                <tr>
+                    <th>First name</th>
+                    <td>{{ consumer.firstName }}</td>
+                </tr>
+                <tr>
+                    <th>Last name</th>
+                    <td>{{ consumer.lastName }}</td>
+                </tr>
+                <tr>
+                    <th>Phone number</th>
+                    <td>{{ consumer.phoneNumber }}</td>
+                </tr>
+            </table>
+
+{#            <a class="btn btn-secondary" href="{{ path('app_consumer_update', {id: business.id}) }}">Update</a>#}
+{#            <button class="btn btn-danger" onclick="deleteBusiness()">Delete</button>#}
+        </div>
+        <div class="col">
+            <div class="d-flex gap-4 align-items-center">
+                <h2>Orders</h2>
+            </div>
+            {% for order in consumer.orders %}
+                <ul class="list-group mt-2">
+                    <li class="list-group-item">
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="{{ path('app_package_view', {id: order.package.id}) }}" class="flex-fill my-0">{{ order.package.name }}</a>
+                            <p class="my-0">{{ order.createdAt|date('H:i d/m') }}</p>
+                            {% if app.user.id == consumer.user.id or is_granted('ROLE_ADMIN')%}
+                                <button onclick="deleteOrder('{{ path('app_order_delete', {id: order.id}) }}')" class="btn btn-danger">Cancel</button>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            {% else %}
+                <p class="text-muted">No active orders.</p>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+    function deleteOrder(path) {
+        fetch(path, {method: "POST"})
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
+    }
+</script>
+
+{% endblock %}

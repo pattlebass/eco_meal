@@ -13,9 +13,38 @@
             <li class="nav-item">
                 <a href="{{ path('app_package') }}" class="nav-link">Packages</a>
             </li>
-            <li class="nav-item">
-                <a href="{{ path('app_business') }}" class="nav-link">Businesses</a>
-            </li>
+            {% if is_granted("ROLE_ADMIN") %}
+                <li class="nav-item">
+                    <a href="{{ path('app_order') }}" class="nav-link">Orders</a>
+                </li>
+            {% endif %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <li class="nav-item">
+                    <a href="{{ path('app_consumer') }}" class="nav-link">Consumers</a>
+                </li>
+            {% endif %}
+            {% if is_granted("ROLE_BUSINESS") or is_granted("ROLE_ADMIN") %}
+                <li class="nav-item">
+                    <a href="{{ path('app_business') }}" class="nav-link">Businesses</a>
+                </li>
+            {% endif %}
+            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                {% if is_granted("ROLE_CONSUMER") %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_consumer_view', {id: app.user.consumer.id}) }}" class="nav-link">My orders</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{{ path('app_login') }}" class="nav-link">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_register') }}" class="nav-link">Register</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block body %}
+<main class="container mt-4" style="max-width: 800px;">
+    <h1>All Orders</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Package</th>
+            <th>Consumer</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td><a href="{{ path('app_package_view', {id: order.package.id}) }}">{{ order.package.name }}</a></td>
+                <td><a href="{{ path('app_consumer_view', {id: order.consumer.id}) }}">{{ order.consumer.id }}</a></td>
+                <td>{{ order.createdAt|date('H:i d/m') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}
