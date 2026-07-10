@@ -7,6 +7,7 @@ use App\Entity\Package;
 use App\Form\BusinessFormType;
 use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -117,6 +118,23 @@ final class BusinessController extends AbstractController
 
         return $this->render('package/update.html.twig', [
             'form' => $form
+        ]);
+    }
+
+    #[Route('/business/{id}/orders', name: 'app_business_orders', methods: ['GET'])]
+    public function orders(Business $business, OrderRepository $orderRepository): Response
+    {
+        $user = $this->getUser();
+        if (!($business->getUser()->getId() == $user->getId() || $this->isGranted("ROLE_ADMIN")))
+        {
+            return $this->redirectToRoute('app_index');
+        }
+
+        $orders = $orderRepository->findByBusiness($business);
+
+        return $this->render('order/business-orders.html.twig', [
+            'business' => $business,
+            'orders' => $orders,
         ]);
     }
 

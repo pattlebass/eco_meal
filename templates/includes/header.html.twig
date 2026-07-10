@@ -17,15 +17,16 @@
                 <li class="nav-item">
                     <a href="{{ path('app_order') }}" class="nav-link">Orders</a>
                 </li>
-            {% endif %}
-            {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item">
                     <a href="{{ path('app_consumer') }}" class="nav-link">Consumers</a>
                 </li>
-            {% endif %}
-            {% if is_granted("ROLE_BUSINESS") %}
                 <li class="nav-item">
                     <a href="{{ path('app_business') }}" class="nav-link">Businesses</a>
+                </li>
+            {% endif %}
+            {% if is_granted("ROLE_BUSINESS") and app.user.business %}
+                <li class="nav-item">
+                    <a href="{{ path('app_business_view', {id: app.user.business.id}) }}" class="nav-link">My business</a>
                 </li>
             {% endif %}
             {% if is_granted("ROLE_CONSUMER") and app.user.consumer %}
