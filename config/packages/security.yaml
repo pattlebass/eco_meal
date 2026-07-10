@@ -34,6 +34,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/registration-business, roles: [ROLE_ADMIN] }
          - { path: ^/business/\d+/orders$, roles: [ROLE_BUSINESS, ROLE_ADMIN] }
          - { path: ^/business/\d+/$, roles: [ROLE_BUSINESS, ROLE_ADMIN] }
          - { path: ^/business/\d+$, roles: [ROLE_USER] }
