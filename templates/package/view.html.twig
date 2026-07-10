@@ -10,6 +10,8 @@
             <div class="d-flex gap-2 h4">
                 <span class="text-muted">{{ package.price }} RON</span>
                 <span>•</span>
+                <span class="text-muted">{{ package.category.name }}</span>
+                <span>•</span>
                 <a href="{{ path('app_business_view', {id: package.business.id}) }}" class="text-decoration-none">{{ package.business.name }}</a>
             </div>
             <hr>

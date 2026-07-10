@@ -26,12 +26,12 @@
             {% endif %}
             {% if is_granted("ROLE_BUSINESS") and app.user.business %}
                 <li class="nav-item">
-                    <a href="{{ path('app_business_view', {id: app.user.business.id}) }}" class="nav-link">My business</a>
+                    <a href="{{ path('app_business_view', {id: app.user.business.id}) }}" class="nav-link">My Business</a>
                 </li>
             {% endif %}
             {% if is_granted("ROLE_CONSUMER") and app.user.consumer %}
                 <li class="nav-item">
-                    <a href="{{ path('app_consumer_view', {id: app.user.consumer.id}) }}" class="nav-link">My orders</a>
+                    <a href="{{ path('app_consumer_view', {id: app.user.consumer.id}) }}" class="nav-link">My Profile</a>
                 </li>
             {% endif %}
             {% if is_granted("IS_AUTHENTICATED_FULLY") %}

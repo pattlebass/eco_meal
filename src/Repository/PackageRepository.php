@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Dto\PackageSearchFilter;
 use App\Entity\Package;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,13 +17,35 @@ class PackageRepository extends ServiceEntityRepository
         parent::__construct($registry, Package::class);
     }
 
-    public function findAvailablePackages(): array
+    public function findAvailableByFilter(PackageSearchFilter $filter): array
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
-            ->where('o.id IS NULL')
-            ->getQuery()
-            ->getResult();
+            ->leftJoin('p.category', 'c')
+            ->andWhere('o.id IS NULL')
+            ->addSelect('c');
+
+        if ($filter->name) {
+            $qb->andWhere('p.name LIKE :name')
+                ->setParameter('name', '%'.$filter->name.'%');
+        }
+
+        if ($filter->category) {
+            $qb->andWhere('c = :cat')
+                ->setParameter('cat', $filter->category);
+        }
+
+        if ($filter->minPrice) {
+            $qb->andWhere('p.price >= :minPrice')
+                ->setParameter('minPrice', $filter->minPrice);
+        }
+
+        if ($filter->maxPrice) {
+            $qb->andWhere('p.price <= :maxPrice')
+                ->setParameter('maxPrice', $filter->maxPrice);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

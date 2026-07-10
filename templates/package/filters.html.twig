@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+<div class="row mt-4 g-2 align-items-center">
+    <div class="col-md">
+        {{ form_row(form.name) }}
+    </div>
+
+    <div class="col-md">
+        {{ form_row(form.category) }}
+    </div>
+
+    <div class="col-md-2">
+        {{ form_row(form.minPrice) }}
+    </div>
+
+    <div class="col-md-2">
+        {{ form_row(form.maxPrice) }}
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">
+            Search
+        </button>
+    </div>
+
+    <div class="col-auto">
+        <a href="{{ path('app_package') }}" class="btn btn-outline-secondary">
+            Clear
+        </a>
+    </div>
+</div>
+{{ form_end(form) }}
