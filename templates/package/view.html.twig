@@ -4,16 +4,15 @@
 
 {% block body %}
 <div class="container mt-4">
-    <div class="row">
-        <div class="col">
+    <div class="row justify-content-center">
+        <div class="col-lg-4">
             <h1 class="package-name">{{ package.name }}</h1>
-            <div class="d-flex gap-2 h4">
-                <span class="text-muted">{{ package.price }} RON</span>
-                <span>•</span>
+            <div class="d-flex gap-2 h4 ">
                 <span class="text-muted">{{ package.category.name }}</span>
                 <span>•</span>
                 <a href="{{ path('app_business_view', {id: package.business.id}) }}" class="text-decoration-none">{{ package.business.name }}</a>
             </div>
+            <span class="text-muted">{{ package.price }} RON</span>
             <hr>
             <p class="package-description">{{ package.description }}</p>
             {% if is_granted("ROLE_CONSUMER") %}
@@ -25,7 +24,7 @@
                 </form>
             {% endif %}
         </div>
-        <div class="col">
+        <div class="col-lg-4">
             <img src="{{ package.photo | default("/default-image.jpg") }}" alt="" class="img-fluid rounded-5">
         </div>
     </div>

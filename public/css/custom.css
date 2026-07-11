@@ -1,0 +1,166 @@
+/* singurul fisier generat */
+
+:root {
+    /* Brand palette */
+    --eco-forest: #1b4332;      /* deep green — headers, nav, primary buttons */
+    --eco-leaf: #2d6a4f;        /* mid green — links, outline buttons */
+    --eco-sage: #d8e2dc;        /* soft green-gray — subtle backgrounds */
+    --eco-amber: #e8871e;       /* ripe mango — accent, success CTAs */
+    --eco-rust: #a13d2f;        /* muted brick-red — danger buttons */
+    --eco-cream: #faf7f0;       /* warm off-white — page background */
+    --eco-ink: #14231c;         /* near-black green — body text */
+
+    /* Bootstrap overrides */
+    --bs-primary: var(--eco-forest);
+    --bs-primary-rgb: 27, 67, 50;
+    --bs-success: var(--eco-leaf);
+    --bs-success-rgb: 45, 106, 79;
+    --bs-body-bg: var(--eco-cream);
+    --bs-body-color: var(--eco-ink);
+    --bs-border-radius: 0.75rem;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--eco-cream);
+}
+
+h1, h2, h3, .display-1, .display-2, .display-3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--eco-forest);
+    letter-spacing: -0.01em;
+}
+
+.lead {
+    color: var(--eco-leaf);
+    font-weight: 500;
+}
+
+a {
+    color: var(--eco-leaf);
+}
+
+a:hover {
+    color: var(--eco-amber);
+}
+
+/* ---- Navbar ---- */
+.navbar {
+    background-color: var(--eco-forest) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand,
+.navbar .nav-link {
+    color: var(--eco-cream) !important;
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.navbar .nav-link:hover {
+    color: var(--eco-amber) !important;
+}
+
+/* ---- Primary buttons ---- */
+.btn-primary {
+    --bs-btn-color: var(--eco-cream);
+    --bs-btn-bg: var(--eco-forest);
+    --bs-btn-border-color: var(--eco-forest);
+    --bs-btn-hover-color: var(--eco-cream);
+    --bs-btn-hover-bg: #143728;
+    --bs-btn-hover-border-color: #143728;
+    --bs-btn-active-color: var(--eco-cream);
+    --bs-btn-active-bg: #0f2b1e;
+    --bs-btn-active-border-color: #0f2b1e;
+    --bs-btn-disabled-bg: var(--eco-forest);
+    --bs-btn-disabled-border-color: var(--eco-forest);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--eco-forest);
+    --bs-btn-border-color: var(--eco-forest);
+    --bs-btn-hover-color: var(--eco-cream);
+    --bs-btn-hover-bg: var(--eco-forest);
+    --bs-btn-hover-border-color: var(--eco-forest);
+    --bs-btn-active-bg: var(--eco-forest);
+    --bs-btn-active-border-color: var(--eco-forest);
+}
+
+/* ---- Success buttons (CTAs) ---- */
+.btn-success {
+    --bs-btn-color: var(--eco-ink);
+    --bs-btn-bg: var(--eco-amber);
+    --bs-btn-border-color: var(--eco-amber);
+    --bs-btn-hover-color: var(--eco-ink);
+    --bs-btn-hover-bg: #d97b12;
+    --bs-btn-hover-border-color: #d97b12;
+    --bs-btn-active-color: var(--eco-ink);
+    --bs-btn-active-bg: #c26d0f;
+    --bs-btn-active-border-color: #c26d0f;
+    --bs-btn-disabled-bg: var(--eco-amber);
+    --bs-btn-disabled-border-color: var(--eco-amber);
+}
+
+.btn-outline-success {
+    --bs-btn-color: var(--eco-leaf);
+    --bs-btn-border-color: var(--eco-leaf);
+    --bs-btn-hover-color: var(--eco-cream);
+    --bs-btn-hover-bg: var(--eco-leaf);
+    --bs-btn-hover-border-color: var(--eco-leaf);
+    --bs-btn-active-bg: var(--eco-leaf);
+    --bs-btn-active-border-color: var(--eco-leaf);
+}
+
+/* ---- Danger buttons ---- */
+.btn-danger {
+    --bs-btn-color: var(--eco-cream);
+    --bs-btn-bg: var(--eco-rust);
+    --bs-btn-border-color: var(--eco-rust);
+    --bs-btn-hover-color: var(--eco-cream);
+    --bs-btn-hover-bg: #832f24;
+    --bs-btn-hover-border-color: #832f24;
+    --bs-btn-active-color: var(--eco-cream);
+    --bs-btn-active-bg: #6f281f;
+    --bs-btn-active-border-color: #6f281f;
+    --bs-btn-disabled-bg: var(--eco-rust);
+    --bs-btn-disabled-border-color: var(--eco-rust);
+}
+
+.btn-outline-danger {
+    --bs-btn-color: var(--eco-rust);
+    --bs-btn-border-color: var(--eco-rust);
+    --bs-btn-hover-color: var(--eco-cream);
+    --bs-btn-hover-bg: var(--eco-rust);
+    --bs-btn-hover-border-color: var(--eco-rust);
+    --bs-btn-active-bg: var(--eco-rust);
+    --bs-btn-active-border-color: var(--eco-rust);
+}
+
+/* ---- Cards (for package listings) ---- */
+.card {
+    border: none;
+    border-radius: var(--bs-border-radius);
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(27, 67, 50, 0.08);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 20px rgba(27, 67, 50, 0.14);
+    transform: translateY(-2px);
+}
+
+.card-title {
+    font-family: var(--font-display);
+    color: var(--eco-forest);
+}
+
+/* ---- Footer (if/when you add one) ---- */
+footer {
+    background-color: var(--eco-forest);
+    color: var(--eco-sage);
+}

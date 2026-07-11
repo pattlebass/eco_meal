@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <main class="container-fluid d-flex align-items-center justify-content-center">
+        <div class="row text-center">
+            <div class="col-lg-8 mx-auto">
+                <h1>Welcome to Eco Meal!</h1>
+                <p class="lead">Save Food. Save Money.</p>
+                <a href="{{ path('app_package') }}" class="btn btn-success">View Packages</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
