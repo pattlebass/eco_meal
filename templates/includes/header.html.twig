@@ -26,6 +26,9 @@
             {% endif %}
             {% if is_granted("ROLE_BUSINESS") and app.user.business %}
                 <li class="nav-item">
+                    <a href="{{ path('app_business_orders', {id: app.user.business.id}) }}" class="nav-link">My Orders</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('app_business_view', {id: app.user.business.id}) }}" class="nav-link">My Business</a>
                 </li>
             {% endif %}

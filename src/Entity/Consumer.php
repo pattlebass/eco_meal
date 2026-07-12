@@ -74,6 +74,11 @@ class Consumer
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->first_name." ".$this->last_name;
+    }
+
     public function getPhoneNumber(): ?string
     {
         return $this->phone_number;

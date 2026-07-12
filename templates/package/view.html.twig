@@ -2,11 +2,15 @@
 
 {% block title %}{{ package.name }}{% endblock %}
 
+{% set image %}
+    <img src="{{ package.photo | default(asset("default-image.jpg")) }}" alt="" class="img-fluid rounded-5">
+{% endset %}
+
 {% block body %}
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-4">
-            <h1 class="package-name">{{ package.name }}</h1>
+            <h1>{{ package.name }}</h1>
             <div class="d-flex gap-2 h4 ">
                 <span class="text-muted">{{ package.category.name }}</span>
                 <span>•</span>
@@ -14,6 +18,10 @@
             </div>
             <span class="text-muted">{{ package.price }} RON</span>
             <hr>
+            <div class="d-lg-none w-75 mx-auto mb-2">
+                {{ image|raw }}
+            </div>
+            <h2>Description</h2>
             <p class="package-description">{{ package.description }}</p>
             {% if is_granted("ROLE_CONSUMER") %}
                 <form action="{{ path('app_order_new', {id: package.id}) }}" method="POST">
@@ -24,8 +32,8 @@
                 </form>
             {% endif %}
         </div>
-        <div class="col-lg-4">
-            <img src="{{ package.photo | default("/default-image.jpg") }}" alt="" class="img-fluid rounded-5">
+        <div class="d-none d-lg-block col-4">
+            {{ image|raw }}
         </div>
     </div>
 </div>

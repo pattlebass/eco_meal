@@ -23,6 +23,7 @@ class OrderRepository extends ServiceEntityRepository
             ->join('o.package', 'p')
             ->where('p.business = :business')
             ->setParameter('business', $business)
+            ->orderBy('o.created_at', 'DESC')
             ->getQuery()
             ->getResult();
     }
