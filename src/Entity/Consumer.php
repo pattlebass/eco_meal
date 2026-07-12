@@ -33,9 +33,16 @@ class Consumer
     #[ORM\OneToOne(mappedBy: 'consumer', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, FavoriteBusiness>
+     */
+    #[ORM\OneToMany(targetEntity: FavoriteBusiness::class, mappedBy: 'consumer_id', orphanRemoval: true)]
+    private Collection $favoriteBusinesses;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->favoriteBusinesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,6 +134,36 @@ class Consumer
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavoriteBusiness>
+     */
+    public function getFavoriteBusinesses(): Collection
+    {
+        return $this->favoriteBusinesses;
+    }
+
+    public function addFavoriteBusiness(FavoriteBusiness $favoriteBusiness): static
+    {
+        if (!$this->favoriteBusinesses->contains($favoriteBusiness)) {
+            $this->favoriteBusinesses->add($favoriteBusiness);
+            $favoriteBusiness->setConsumer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteBusiness(FavoriteBusiness $favoriteBusiness): static
+    {
+        if ($this->favoriteBusinesses->removeElement($favoriteBusiness)) {
+            // set the owning side to null (unless already changed)
+            if ($favoriteBusiness->getConsumer() === $this) {
+                $favoriteBusiness->setConsumer(null);
+            }
+        }
 
         return $this;
     }

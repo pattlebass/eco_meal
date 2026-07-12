@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Dto\PackageSearchFilter;
+use App\Entity\Consumer;
+use App\Entity\FavoriteBusiness;
 use App\Entity\Package;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,6 +29,28 @@ class PackageRepository extends ServiceEntityRepository
     }
 
     public function findAvailableByFilter(PackageSearchFilter $filter): array
+    {
+        return $this->createAvailablePackagesQueryBuilder($filter)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAvailableFavoritesByFilter(PackageSearchFilter $filter, Consumer $consumer): array
+    {
+        $queryBuilder = $this->createAvailablePackagesQueryBuilder($filter);
+
+        $queryBuilder
+            ->join("p.business", "b")
+            ->innerJoin(FavoriteBusiness::class, "fav", "ON", "fav.business = b")
+            ->andWhere("fav.consumer = :consumer")
+            ->setParameter("consumer", $consumer);
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function createAvailablePackagesQueryBuilder(PackageSearchFilter $filter): QueryBuilder
     {
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
@@ -53,7 +78,7 @@ class PackageRepository extends ServiceEntityRepository
                 ->setParameter('maxPrice', $filter->maxPrice);
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
 //    /**

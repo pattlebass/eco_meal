@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Packages{% endblock %}
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block body %}
     <style>
@@ -21,21 +21,12 @@
     <main class="container mt-4">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h1>Available Packages</h1>
-                {% include "package/filters.html.twig" %}
+                <h1>{{ pageTitle }}</h1>
+                {% include "package/_filters.html.twig" with {form: form} %}
                 <div class="row g-4 mt-2">
                     {% for package in packages %}
                         <div class="col-lg-4 col-sm-6">
-                            <article class="package card h-100">
-                                <a href="{{ path('app_package_view', {id: package.id}) }}">
-                                    <img src="{{ package.photo | default("/default-image.jpg") }}" alt="" class="card-img-top">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">{{ package.name }}</h5>
-                                        <h6 class="card-subtitle">{{ package.price }} RON</h6>
-                                        <p class="card-text text-muted">{{ package.description }}</p>
-                                    </div>
-                                </a>
-                            </article>
+                            {% include "package/_package.html.twig" with {package: package} %}
                         </div>
                     {% else %}
                         <div class="col">

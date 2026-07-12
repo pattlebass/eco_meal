@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Business;
+use App\Entity\FavoriteBusiness;
 use App\Entity\Package;
 use App\Form\BusinessFormType;
 use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
+use App\Repository\FavoriteBusinessRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,10 +29,19 @@ final class BusinessController extends AbstractController
     }
 
     #[Route('/business/{id}', name: 'app_business_view', methods: ['GET'])]
-    public function view(Business $business): Response
+    public function view(Business $business, FavoriteBusinessRepository $favoriteBusinessRepository): Response
     {
+        $isFavorite = false;
+        if ($this->isGranted('ROLE_USER') and !$this->isGranted('ROLE_ADMIN')) {
+            $isFavorite = $favoriteBusinessRepository->findOneBy([
+                'business' => $business,
+                'consumer' => $this->getUser()->getConsumer()
+            ]) != null;
+        }
+
         return $this->render('business/view.html.twig', [
             'business' => $business,
+            'isFavorite' => $isFavorite
         ]);
     }
 
@@ -138,4 +149,29 @@ final class BusinessController extends AbstractController
         ]);
     }
 
+    // probabil ca trebuia sa fac doua rute separate: add_to si remove
+    #[Route('/business/{id}/toggle-favorite', name: 'app_business_toggle_favorite', methods: ['POST'])]
+    public function favorite(Business $business, EntityManagerInterface $em, FavoriteBusinessRepository $favoriteRepository): Response
+    {
+        $favorite = $favoriteRepository->findOneBy([
+            'business' => $business,
+            'consumer' => $this->getUser()->getConsumer()
+        ]);
+
+        $consumer = $this->getUser()->getConsumer();
+
+        if ($favorite) {
+            $em->remove($favorite);
+        } else {
+            $favorite = new FavoriteBusiness();
+            $favorite->setConsumer($consumer);
+            $favorite->setBusiness($business);
+
+            $em->persist($favorite);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('app_business_view', ['id' => $business->getId()]);
+    }
 }

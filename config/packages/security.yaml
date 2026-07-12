@@ -35,8 +35,9 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
          - { path: ^/registration-business, roles: [ROLE_ADMIN] }
-         - { path: ^/business/\d+/orders$, roles: [ROLE_BUSINESS, ROLE_ADMIN] }
-         - { path: ^/business/\d+/$, roles: [ROLE_BUSINESS, ROLE_ADMIN] }
+         - { path: ^/business/\d+/orders$, roles: [ROLE_BUSINESS] }
+         - { path: ^/business/\d+/toggle-favorite, roles: [ROLE_CONSUMER] }
+         - { path: ^/business/\d+/$, roles: [ROLE_BUSINESS] }
          - { path: ^/business/\d+$, roles: [ROLE_USER] }
          - { path: ^/business, roles: [ROLE_ADMIN] }
          - { path: ^/(update|new)/business, roles: [ROLE_ADMIN] }
