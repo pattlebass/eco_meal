@@ -1,6 +1,8 @@
 <article class="package card h-100">
     <a href="{{ path('app_package_view', {id: package.id}) }}">
-        <img src="{{ package.photo | default("/default-image.jpg") }}" alt="" class="card-img-top">
+        <div class="ratio ratio-1x1">
+            <img class="card-img-top object-fit-cover" src="{{ package.image.path | default("/default-image.svg") }}" alt="">
+        </div>
         <div class="card-body">
             <h5 class="card-title text-primary">{{ package.name }}</h5>
             <h6 class="card-subtitle">{{ package.price }} RON</h6>

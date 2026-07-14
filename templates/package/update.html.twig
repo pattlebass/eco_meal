@@ -8,15 +8,13 @@
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
-
-    <div class="example-wrapper">
-        <h1>Update package</h1>
-        {{ form_start(form) }}
-            {{ form_row(form.name) }}
-            {{ form_row(form.description) }}
-            {{ form_row(form.price) }}
-            {{ form_row(form.category) }}
-        {{ form_end(form) }}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="mb-4">Update package</h1>
+                {{ form(form) }}
+            </div>
+        </div>
     </div>
 
 {% endblock %}

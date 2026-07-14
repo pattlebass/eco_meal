@@ -43,9 +43,16 @@ class Business
     #[ORM\OneToOne(mappedBy: 'business', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, PackageImage>
+     */
+    #[ORM\OneToMany(targetEntity: PackageImage::class, mappedBy: 'business', orphanRemoval: true)]
+    private Collection $packageImages;
+
     public function __construct()
     {
         $this->packages = new ArrayCollection();
+        $this->packageImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +180,36 @@ class Business
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PackageImage>
+     */
+    public function getPackageImages(): Collection
+    {
+        return $this->packageImages;
+    }
+
+    public function addPackageImage(PackageImage $packageImage): static
+    {
+        if (!$this->packageImages->contains($packageImage)) {
+            $this->packageImages->add($packageImage);
+            $packageImage->setBusiness($this);
+        }
+
+        return $this;
+    }
+
+    public function removePackageImage(PackageImage $packageImage): static
+    {
+        if ($this->packageImages->removeElement($packageImage)) {
+            // set the owning side to null (unless already changed)
+            if ($packageImage->getBusiness() === $this) {
+                $packageImage->setBusiness(null);
+            }
+        }
 
         return $this;
     }

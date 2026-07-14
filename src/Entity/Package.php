@@ -39,6 +39,9 @@ class Package
     #[ORM\OneToOne(mappedBy: 'package', cascade: ['persist', 'remove'])]
     private ?Order $consumer_order = null;
 
+    #[ORM\ManyToOne]
+    private ?PackageImage $image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -141,6 +144,18 @@ class Package
         }
 
         $this->consumer_order = $consumer_order;
+
+        return $this;
+    }
+
+    public function getImage(): ?PackageImage
+    {
+        return $this->image;
+    }
+
+    public function setImage(?PackageImage $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -3,7 +3,7 @@
 {% block title %}{{ package.name }}{% endblock %}
 
 {% set image %}
-    <img src="{{ package.photo | default(asset("default-image.jpg")) }}" alt="" class="img-fluid rounded-5">
+    <img src="{{ package.image.path | default(asset("default-image.svg")) }}" alt="" class="img-fluid rounded-5">
 {% endset %}
 
 {% block body %}

@@ -10,9 +10,11 @@ use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
 use App\Repository\FavoriteBusinessRepository;
 use App\Repository\OrderRepository;
+use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DomCrawler\Image;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -114,7 +116,7 @@ final class BusinessController extends AbstractController
     }
 
     #[Route('/business/{id}/update-package/{packageId}', name: 'app_business_update_package', methods: ['GET', 'POST'])]
-    public function updatePackage(Business $business, int $packageId, Request $request, EntityManagerInterface $entityManager): Response
+    public function updatePackage(Business $business, int $packageId, ImageUploader $imageUploader, Request $request, EntityManagerInterface $entityManager): Response
     {
         $package = $entityManager->getRepository(Package::class)->find($packageId);
         $package->setCreatedAt(new \DateTimeImmutable());
@@ -122,7 +124,15 @@ final class BusinessController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($package);
+            $uploadedImage = $form['uploadedImage']->getData();
+            $existingImage = $form['image']->getData();
+            if ($uploadedImage) {
+                $packageImage = $imageUploader->uploadPackageImage($uploadedImage, $business, $entityManager);
+                $package->setImage($packageImage);
+            } elseif ($existingImage) {
+                $package->setImage($existingImage);
+            }
+
             $entityManager->flush();
             return $this->redirectToRoute('app_business_view', ['id' => $business->getId()]);
         }

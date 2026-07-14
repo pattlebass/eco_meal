@@ -1,0 +1,15 @@
+{% block _package_form_image_widget %}
+    <div class="container">
+        <div class="row">
+            {% for child in form %}
+                {% set imageUrl = child.vars.attr['data-url'] | default(asset("default-image.svg")) %}
+                <label class="col-12 col-sm-6 col-lg-3">
+                    {{ form_widget(child) }}
+                    <div class="ratio ratio-1x1">
+                        <img class="w-100 object-fit-cover rounded" src="{{ imageUrl }}" alt="">
+                    </div>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
