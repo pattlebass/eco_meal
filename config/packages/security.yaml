@@ -41,6 +41,7 @@ security:
          - { path: ^/business/\d+/toggle-favorite$, roles: [ROLE_CONSUMER] }
          - { path: ^/business/\d+/new-package$, roles: [ROLE_BUSINESS] }
          - { path: ^/business/\d+/update-package$, roles: [ROLE_BUSINESS] }
+         - { path: ^/business/\d+/update-package/\d+$, roles: [ROLE_BUSINESS] }
          - { path: ^/business/\d+/$, roles: [ROLE_BUSINESS] }
          - { path: ^/business/\d+$, roles: [ROLE_USER] }
          - { path: ^/business, roles: [ROLE_ADMIN] }
