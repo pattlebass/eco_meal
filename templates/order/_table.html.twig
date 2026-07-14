@@ -1,13 +1,14 @@
-<table class="table table-striped">
+<table class="table table-striped align-middle">
     <thead>
     <tr>
         <th>Id</th>
         <th>Package</th>
         <th>Consumer</th>
         <th>Created At</th>
+        <th>Actions</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="">
     {% for order in orders %}
         <tr>
             <td>{{ order.id }}</td>
@@ -22,6 +23,20 @@
                 </a>
             </td>
             <td>{{ order.createdAt|date('H:i d/m') }}</td>
+            <td>
+                <form class="d-inline" method="post" action="{{ path('app_package_delete', {id: order.package.id}) }}">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="bi bi-check-lg"></i>
+                        Fullfill
+                    </button>
+                </form>
+                <form class="d-inline" method="post" action="{{ path('app_order_delete', {id: order.id}) }}">
+                    <button class="btn btn-outline-danger" type="submit">
+                        <i class="bi bi-x-lg"></i>
+                        Cancel
+                    </button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
