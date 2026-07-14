@@ -96,7 +96,7 @@ final class BusinessController extends AbstractController
         ]);
     }
     #[Route('/business/{id}/new-package', name: 'app_business_new_package', methods: ['GET', 'POST'])]
-    public function newPackage(Business $business, Request $request, EntityManagerInterface $entityManager): Response
+    public function newPackage(Business $business, Request $request, ImageUploader $imageUploader, EntityManagerInterface $entityManager): Response
     {
         $package = new Package();
         $package->setBusiness($business);
@@ -105,6 +105,15 @@ final class BusinessController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedImage = $form['uploadedImage']->getData();
+            $existingImage = $form['image']->getData();
+            if ($uploadedImage) {
+                $packageImage = $imageUploader->uploadPackageImage($uploadedImage, $business, $entityManager);
+                $package->setImage($packageImage);
+            } elseif ($existingImage) {
+                $package->setImage($existingImage);
+            }
+
             $entityManager->persist($package);
             $entityManager->flush();
             return $this->redirectToRoute('app_package');
