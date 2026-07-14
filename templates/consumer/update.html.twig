@@ -1,24 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Update business{% endblock %}
+{% block title %}Update profile{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mx-auto">
+                <h1 class="mb-3">Update profile</h1>
 
+                {{ form_errors(form) }}
 
-    <div class="example-wrapper">
-        <h1>Update business</h1>
-        {{ form_start(form) }}
-            {{ form_row(form.name) }}
-            {{ form_row(form.city) }}
-            {{ form_row(form.street) }}
-            {{ form_row(form.houseNumber) }}
-            {{ form_row(form.phoneNumber) }}
-            {{ form_row(form.businessType) }}
-        {{ form_end(form) }}
-    </div>
+                {{ form_start(form, {}) }}
+                    {{ form_row(form.consumer.firstName) }}
+                    {{ form_row(form.consumer.lastName) }}
+                    {{ form_row(form.consumer.phoneNumber) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.plainPassword, {
+                        label: 'Password'
+                    }) }}
+                    {% do form.agreeTerms.setRendered() %}
 
+                    <button type="submit" class="btn btn-primary">Update</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </main>
 {% endblock %}

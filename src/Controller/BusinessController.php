@@ -6,6 +6,8 @@ use App\Entity\Business;
 use App\Entity\FavoriteBusiness;
 use App\Entity\Package;
 use App\Form\BusinessFormType;
+use App\Form\BusinessRegistrationFormType;
+use App\Form\UserFormType;
 use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
 use App\Repository\FavoriteBusinessRepository;
@@ -79,7 +81,7 @@ final class BusinessController extends AbstractController
         ]);
     }
 
-    #[Route('/update/business/{id}', name: 'app_business_update', methods: ['GET', 'POST'])]
+    #[Route('/business/{id}/update', name: 'app_business_update', methods: ['GET', 'POST'])]
     public function update(Business $business, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BusinessFormType::class, $business);
@@ -95,9 +97,38 @@ final class BusinessController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('/business/{id}/update-user', name: 'app_business_update_user', methods: ['GET', 'POST'])]
+    public function updateUser(Business $business, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if (!($business->getUser()->getId() == $user->getId()))
+        {
+            return $this->redirectToRoute('app_index');
+        }
+
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_business');
+        }
+
+        return $this->render('business/update-user.html.twig', [
+            'form' => $form
+        ]);
+    }
     #[Route('/business/{id}/new-package', name: 'app_business_new_package', methods: ['GET', 'POST'])]
     public function newPackage(Business $business, Request $request, ImageUploader $imageUploader, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!($business->getUser()->getId() == $user->getId()))
+        {
+            return $this->redirectToRoute('app_index');
+        }
+
         $package = new Package();
         $package->setBusiness($business);
         $package->setCreatedAt(new \DateTimeImmutable());

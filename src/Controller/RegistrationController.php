@@ -6,7 +6,7 @@ use App\Entity\Business;
 use App\Entity\Consumer;
 use App\Entity\User;
 use App\Form\BusinessRegistrationFormType;
-use App\Form\RegistrationFormType;
+use App\Form\ConsumerRegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,7 +23,9 @@ class RegistrationController extends AbstractController
         $user = new User();
         $consumer = new Consumer();
         $user->setConsumer($consumer);
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(ConsumerRegistrationFormType::class, $user, [
+            'validation_groups' => ['Default', 'registration']
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -31,14 +33,10 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             $user->setRoles(["ROLE_CONSUMER"]);
-
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // do anything else you need here, like send an email
 
             return $security->login($user, 'App\Security\LoginFormAuthenticator', 'main');
         }

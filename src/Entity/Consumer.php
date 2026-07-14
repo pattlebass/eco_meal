@@ -36,7 +36,7 @@ class Consumer
     /**
      * @var Collection<int, FavoriteBusiness>
      */
-    #[ORM\OneToMany(targetEntity: FavoriteBusiness::class, mappedBy: 'consumer_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: FavoriteBusiness::class, mappedBy: 'consumer', orphanRemoval: true)]
     private Collection $favoriteBusinesses;
 
     public function __construct()

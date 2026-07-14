@@ -39,15 +39,23 @@
                     </button>
                 </form>
             {% endif %}
+            {% if is_granted('ROLE_BUSINESS') and app.user.business?.id == business.id %}
+                <a class="btn btn-secondary" href="{{ path('app_business_update_user', {id: business.id}) }}">
+                    <i class="bi bi-pencil"></i>
+                    Update account
+                </a>
+            {% endif %}
             {% if is_granted('ROLE_ADMIN')%}
                 <a class="btn btn-secondary" href="{{ path('app_business_update', {id: business.id}) }}">
                     <i class="bi bi-pencil"></i>
                     Update
                 </a>
-                <button class="btn btn-danger" onclick="deleteBusiness()">
-                    <i class="bi bi-trash"></i>
-                    Delete
-                </button>
+                <form class="d-inline" method="post" action="{{ path('app_business_delete', {id: business.id}) }}">
+                    <button class="btn btn-danger" type="submit">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
+                </form>
             {% endif %}
         </div>
     </div>
@@ -68,7 +76,7 @@
         <div class="col-lg-4">
             <div class="d-flex gap-4 align-items-center">
                 <h2>Packages</h2>
-                {% if is_granted("ROLE_BUSINESS") and app.user.business %}
+                {% if is_granted("ROLE_BUSINESS") and app.user.business?.id == business.id %}
                     <a class="btn btn-primary" href="{{ path('app_business_new_package', {'id': business.id}) }}">
                         <i class="bi bi-plus-lg"></i>
                         New package
@@ -98,14 +106,6 @@
 </main>
 
 <script>
-    function deleteBusiness() {
-        fetch("{{ path('app_business_delete', {id: business.id}) }}", {method: "POST"})
-            .then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                }
-            });
-    }
     function deletePackage(path) {
         fetch(path, {method: "POST"})
             .then(response => {

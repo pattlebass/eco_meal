@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class RegistrationFormType extends AbstractType
+class ConsumerRegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,6 +23,7 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new IsTrue(
                         message: 'You should agree to our terms.',
+                        groups: ['registration']
                     ),
                 ],
             ])
@@ -30,10 +31,12 @@ class RegistrationFormType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
+                'required' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank(
                         message: 'Please enter a password',
+                        groups: ['registration']
                     ),
                     new Length(
                         min: 6,
@@ -54,6 +57,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'passwordRequired' => true
         ]);
     }
 }
