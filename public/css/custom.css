@@ -149,11 +149,6 @@ a:hover {
     transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.card:hover {
-    box-shadow: 0 6px 20px rgba(27, 67, 50, 0.14);
-    transform: translateY(-2px);
-}
-
 .card-title {
     font-family: var(--font-display);
     color: var(--eco-forest);
