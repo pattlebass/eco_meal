@@ -8,10 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a href="/" class="nav-link">Home</a>
+                <a href="/" class="nav-link">
+                    <i class="bi bi-house"></i>
+                    Home
+                </a>
             </li>
             <li class="nav-item">
-                <a href="{{ path('app_package') }}" class="nav-link">Packages</a>
+                <a href="{{ path('app_package') }}" class="nav-link">
+                    <i class="bi bi-fork-knife"></i>
+                    Packages
+                </a>
             </li>
             {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item">
@@ -26,7 +32,10 @@
             {% endif %}
             {% if is_granted("ROLE_BUSINESS") and app.user.business %}
                 <li class="nav-item">
-                    <a href="{{ path('app_business_orders', {id: app.user.business.id}) }}" class="nav-link">My Orders</a>
+                    <a href="{{ path('app_business_orders', {id: app.user.business.id}) }}" class="nav-link">
+                        <i class="bi bi-receipt"></i>
+                        My Orders
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_business_view', {id: app.user.business.id}) }}" class="nav-link">My Business</a>
@@ -34,10 +43,16 @@
             {% endif %}
             {% if is_granted("ROLE_CONSUMER") and app.user.consumer %}
                 <li class="nav-item">
-                    <a href="{{ path('app_package_favorite') }}" class="nav-link">Favorites</a>
+                    <a href="{{ path('app_package_favorite') }}" class="nav-link">
+                        <i class="bi bi-heart"></i>
+                        Favorites
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_consumer_view', {id: app.user.consumer.id}) }}" class="nav-link">My Profile</a>
+                    <a href="{{ path('app_consumer_view', {id: app.user.consumer.id}) }}" class="nav-link">
+                        <i class="bi bi-person"></i>
+                        My Profile
+                    </a>
                 </li>
             {% endif %}
             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
