@@ -35,7 +35,12 @@ final class ConsumerController extends AbstractController
     public function view(Consumer $consumer): Response
     {
         $user = $this->getUser();
-        if (!($consumer->getUser()->getId() == $user->getId() || $this->isGranted("ROLE_ADMIN")))
+        if (
+            !($consumer->getUser()->getId() == $user->getId()
+            || $this->isGranted("ROLE_ADMIN")
+            || $this->isGranted("ROLE_BUSINESS") // ideal ar trebui sa se vada doar clientii proprii
+            )
+        )
         {
             return $this->redirectToRoute('app_index');
         }
