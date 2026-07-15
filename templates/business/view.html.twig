@@ -67,7 +67,11 @@
                     <table class="table">
                         <tr>
                             <th>Address</th>
-                            <td>{{ business.street }}, {{ business.houseNumber }}, {{ business.city }}</td>
+                            <td>
+                                <a href="https://maps.google.com/?q={{ business.fullAddress|escape }}" target="_blank">
+                                    {{ business.fullAddress }}
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <th>Contact</th>

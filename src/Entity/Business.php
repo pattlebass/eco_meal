@@ -72,6 +72,11 @@ class Business
         return $this;
     }
 
+    public function getFullAddress(): ?string
+    {
+        return $this->street.", ".$this->house_number.", ".$this->city;
+    }
+
     public function getCity(): ?string
     {
         return $this->city;
