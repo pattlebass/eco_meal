@@ -3,36 +3,13 @@
 {% block title %}{{ pageTitle }}{% endblock %}
 
 {% block body %}
-    <style>
-        .package a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .package {
-            transition: transform 0.1s;
-        }
-
-        .package:hover {
-            transform: translateY(-3px) scale(1.02);
-        }
-    </style>
-
     <main class="container mt-4">
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <h1>{{ pageTitle }}</h1>
                 {% include "package/_filters.html.twig" with {form: form} %}
                 <div class="row g-4 mt-2">
-                    {% for package in packages %}
-                        <div class="col-lg-4 col-sm-6">
-                            {% include "package/_package.html.twig" with {package: package} %}
-                        </div>
-                    {% else %}
-                        <div class="col">
-                            <p class="text-muted">No matching packages.</p>
-                        </div>
-                    {% endfor %}
+                    {% include "package/_package_grid.html.twig" %}
                 </div>
             </div>
         </div>

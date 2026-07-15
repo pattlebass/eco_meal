@@ -12,6 +12,7 @@ use App\Form\PackageFormType;
 use App\Repository\BusinessRepository;
 use App\Repository\FavoriteBusinessRepository;
 use App\Repository\OrderRepository;
+use App\Repository\PackageRepository;
 use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,7 +34,7 @@ final class BusinessController extends AbstractController
     }
 
     #[Route('/business/{id}', name: 'app_business_view', methods: ['GET'])]
-    public function view(Business $business, FavoriteBusinessRepository $favoriteBusinessRepository): Response
+    public function view(Business $business, PackageRepository $packageRepository, FavoriteBusinessRepository $favoriteBusinessRepository): Response
     {
         $isFavorite = false;
         if ($this->isGranted('ROLE_USER') and !$this->isGranted('ROLE_ADMIN')) {
@@ -43,8 +44,11 @@ final class BusinessController extends AbstractController
             ]) != null;
         }
 
+        $availablePackages = $packageRepository->findAvailableByBusiness($business);
+
         return $this->render('business/view.html.twig', [
             'business' => $business,
+            'packages' => $availablePackages,
             'isFavorite' => $isFavorite
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Dto\PackageSearchFilter;
+use App\Entity\Business;
 use App\Entity\Consumer;
 use App\Entity\FavoriteBusiness;
 use App\Entity\Package;
@@ -25,6 +26,16 @@ class PackageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
             ->andWhere('o.id IS NULL');
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAvailableByBusiness(Business $business): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.consumer_order', 'o')
+            ->andWhere('o.id IS NULL')
+            ->andWhere('p.business = :b')
+            ->setParameter('b', $business);
         return $qb->getQuery()->getResult();
     }
 
