@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <h1>Orders for {{ business.name }}</h1>
-            {% include "order/_table.html.twig" %}
+            {% include "order/_table.html.twig" with {orders: orders, showActions: true}  %}
         </div>
     </div>
 </main>

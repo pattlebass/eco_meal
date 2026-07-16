@@ -5,7 +5,9 @@
         <th>Package</th>
         <th>Consumer</th>
         <th>Created At</th>
-        <th>Actions</th>
+        {% if showActions %}
+            <th>Actions</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody class="">
@@ -23,20 +25,22 @@
                 </a>
             </td>
             <td>{{ order.createdAt|date('H:i d/m') }}</td>
-            <td>
-                <form class="d-inline" method="post" action="{{ path('app_package_delete', {id: order.package.id}) }}">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="bi bi-check-lg"></i>
-                        Fullfill
-                    </button>
-                </form>
-                <form class="d-inline" method="post" action="{{ path('app_order_delete', {id: order.id}) }}">
-                    <button class="btn btn-outline-danger" type="submit">
-                        <i class="bi bi-x-lg"></i>
-                        Cancel
-                    </button>
-                </form>
-            </td>
+            {% if showActions %}
+                <td>
+                    <form class="d-inline" method="post" action="{{ path('app_package_delete', {id: order.package.id}) }}">
+                        <button class="btn btn-outline-success" type="submit">
+                            <i class="bi bi-check-lg"></i>
+                            Fullfill
+                        </button>
+                    </form>
+                    <form class="d-inline" method="post" action="{{ path('app_order_delete', {id: order.id}) }}">
+                        <button class="btn btn-outline-danger" type="submit">
+                            <i class="bi bi-x-lg"></i>
+                            Cancel
+                        </button>
+                    </form>
+                </td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>
