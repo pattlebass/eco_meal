@@ -22,11 +22,11 @@ class PackageFiltersType extends AbstractType
             ])
             ->add('minPrice', NumberType::class, [
                 'required' => false,
-                'label' => 'Minimum price'
+                'label' => 'Min price'
             ])
             ->add('maxPrice', NumberType::class, [
                 'required' => false,
-                'label' => 'Maximum price'
+                'label' => 'Max price'
             ])
             ->add('category', EntityType::class, [
                 'required' => false,
