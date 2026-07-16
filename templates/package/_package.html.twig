@@ -1,11 +1,18 @@
 <article class="package card h-100">
     <a href="{{ path('app_package_view', {id: package.id}) }}">
-        <div class="ratio ratio-1x1">
-            <img class="card-img-top object-fit-cover" src="{{ package.image.path | default("/default-image.svg") }}" alt="">
+        <div class="position-relative">
+            <div class="ratio ratio-1x1">
+                <img class="card-img-top object-fit-cover"
+                     src="{{ package.image.path | default('/default-image.svg') }}"
+                     alt="">
+            </div>
+            <div class="position-absolute bottom-0 end-0 m-2">
+                <span class="badge text-bg-primary">{{ package.price }} RON</span>
+            </div>
         </div>
         <div class="card-body">
             <h5 class="card-title text-primary">{{ package.name }}</h5>
-            <h6 class="card-subtitle">{{ package.price }} RON</h6>
+            <h6 class="card-subtitle">{{ package.business.name }}</h6>
             <p class="card-text text-muted">{{ package.description }}</p>
         </div>
     </a>
