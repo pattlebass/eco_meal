@@ -66,6 +66,7 @@ class PackageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
             ->leftJoin('p.category', 'c')
+            ->leftJoin('p.business', 'b')
             ->andWhere('o.id IS NULL')
             ->addSelect('c');
 
@@ -77,6 +78,11 @@ class PackageRepository extends ServiceEntityRepository
         if ($filter->category) {
             $qb->andWhere('c = :cat')
                 ->setParameter('cat', $filter->category);
+        }
+
+        if ($filter->city) {
+            $qb->andWhere('b.city = :city')
+                ->setParameter('city', $filter->city);
         }
 
         if ($filter->minPrice) {

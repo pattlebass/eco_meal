@@ -2,10 +2,12 @@
 
 namespace App\Form;
 
+use App\Constant\Cities;
 use App\Entity\Business;
 use App\Entity\BusinessType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +18,9 @@ class BusinessFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class)
-                ->add('city', TextType::class)
+                ->add('city', ChoiceType::class, [
+                    'choices' => array_combine(Cities::LIST, Cities::LIST),
+                ])
                 ->add('street', TextType::class)
                 ->add('houseNumber', TextType::class)
                 ->add('phoneNumber', TextType::class)

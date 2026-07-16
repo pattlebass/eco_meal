@@ -11,6 +11,5 @@ class PackageSearchFilter
     public ?float $minPrice = null;
     public ?float $maxPrice = null;
     public ?Category $category = null;
-//    public ?BusinessType $businessType = null;
-//    public ?Business $business = null;
+    public ?string $city = null;
 }
