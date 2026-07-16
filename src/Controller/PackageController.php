@@ -29,7 +29,6 @@ final class PackageController extends AbstractController
         $packages = $packageRepository->findAvailableByFilter($filter);
 
         return $this->render('package/index.html.twig', [
-            'pageTitle' => "Available Packages",
             'packages' => $packages,
             'form' => $form,
         ]);
@@ -42,11 +41,12 @@ final class PackageController extends AbstractController
         $form = $this->createForm(PackageFiltersType::class, $filter, ['method' => 'GET']);
         $form->handleRequest($request);
 
-        $packages = $packageRepository->findAvailableFavoritesByFilter($filter, $this->getUser()->getConsumer());
+        $consumer = $this->getUser()->getConsumer();
+        $packages = $packageRepository->findAvailableFavoritesByFilter($filter, $consumer);
 
-        return $this->render('package/index.html.twig', [
-            'pageTitle' => "Packages from Favorites",
+        return $this->render('package/favorite_index.html.twig', [
             'packages' => $packages,
+            'favoriteBusinesses' => $consumer->getFavoriteBusinesses(),
             'form' => $form,
         ]);
     }
