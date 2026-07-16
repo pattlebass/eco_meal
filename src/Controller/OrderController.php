@@ -33,16 +33,37 @@ final class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_delete', methods: ['POST'])]
     public function delete(Order $order, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted("ROLE_CONSUMER");
         $user = $this->getUser();
+
         $consumer = $order->getConsumer();
-        if (!($consumer->getUser()->getId() == $user->getId() || $this->isGranted("ROLE_ADMIN")))
-        {
+        $business = $order->getPackage()->getBusiness();
+
+        $allowed = false;
+
+        if ($this->isGranted('ROLE_CONSUMER')) {
+            $allowed = $consumer->getUser()->getId() === $user->getId();
+        }
+
+        if ($this->isGranted('ROLE_BUSINESS')) {
+            $allowed = $business->getUser()->getId() === $user->getId();
+        }
+
+        if (!$allowed) {
             return $this->redirectToRoute('app_index');
         }
+
         $entityManager->remove($order);
         $entityManager->flush();
-        return $this->redirectToRoute('app_consumer_view', ['id' => $consumer->getId()]);
+
+        if ($this->isGranted('ROLE_CONSUMER')) {
+            return $this->redirectToRoute('app_consumer_view', [
+                'id' => $consumer->getId(),
+            ]);
+        }
+
+        return $this->redirectToRoute('app_business_orders', [
+            'id' => $business->getId(),
+        ]);
     }
 
     #[Route('/package/{id}/new-order', name: 'app_order_new', methods: ['POST'])]
@@ -55,6 +76,8 @@ final class OrderController extends AbstractController
 
         $entityManager->persist($order);
         $entityManager->flush();
+
+        $this->addFlash('success', '"'.$package->getName().'" ordered.');
         return $this->redirectToRoute('app_package');
     }
 }

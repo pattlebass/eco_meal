@@ -49,7 +49,7 @@ security:
          - { path: ^/consumer/\d+/update$, roles: [ROLE_CONSUMER] }
          - { path: ^/consumer/\d+$, roles: [ROLE_CONSUMER, ROLE_BUSINESS] }
          - { path: ^/consumer, roles: [ROLE_ADMIN] }
-         - { path: ^/order/\d+$, roles: [ ROLE_CONSUMER ] }
+         - { path: ^/order/\d+$, roles: [ ROLE_CONSUMER, ROLE_BUSINESS ] }
          - { path: ^/order, roles: [ ROLE_ADMIN ] }
          - { path: ^/package/\d+/new-order$, roles: [ ROLE_CONSUMER ] }
     role_hierarchy:

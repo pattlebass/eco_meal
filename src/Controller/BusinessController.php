@@ -151,6 +151,7 @@ final class BusinessController extends AbstractController
 
             $entityManager->persist($package);
             $entityManager->flush();
+
             return $this->redirectToRoute('app_package');
         }
 
