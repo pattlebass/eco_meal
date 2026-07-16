@@ -51,8 +51,7 @@ class PackageRepository extends ServiceEntityRepository
         $queryBuilder = $this->createAvailablePackagesQueryBuilder($filter);
 
         $queryBuilder
-            ->join("p.business", "b")
-            ->innerJoin(FavoriteBusiness::class, "fav", "ON", "fav.business = b")
+            ->innerJoin(FavoriteBusiness::class, "fav", "WITH", "fav.business = b")
             ->andWhere("fav.consumer = :consumer")
             ->setParameter("consumer", $consumer);
 
@@ -66,6 +65,7 @@ class PackageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
             ->leftJoin('p.category', 'c')
+            ->leftJoin('p.business', 'b')
             ->andWhere('o.id IS NULL')
             ->addSelect('c');
 
