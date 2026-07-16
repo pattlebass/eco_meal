@@ -66,7 +66,6 @@ class PackageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.consumer_order', 'o')
             ->leftJoin('p.category', 'c')
-            ->leftJoin('p.business', 'b')
             ->andWhere('o.id IS NULL')
             ->addSelect('c');
 
