@@ -12,6 +12,14 @@
         transform: translateY(-3px) scale(1.02);
         box-shadow: 0 6px 20px rgba(27, 67, 50, 0.14);
     }
+
+    .package .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
 {% for package in packages %}
