@@ -95,10 +95,10 @@
                 {% endif %}
             </div>
             {% if is_granted("ROLE_CONSUMER") %}
-            <div class="row g-4 mt-2">
-                <h2>Available Packages</h2>
-                {% include "package/_package_grid.html.twig" with {packages: packages} %}
-            </div>
+                <div class="row g-4 mt-2">
+                    <h2>Available Packages</h2>
+                    {% include "package/_package_grid.html.twig" with {packages: packages} %}
+                </div>
             {% endif %}
         </div>
     </div>

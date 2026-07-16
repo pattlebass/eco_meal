@@ -7,66 +7,76 @@
 <main class="container mt-4">
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <h1>Hi, {{ consumer.firstName }}</h1>
-            <hr>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            {% if app.user.id == consumer.user.id %}
-                <a class="btn btn-secondary" href="{{ path('app_consumer_update', {id: consumer.id}) }}">
-                    <i class="bi bi-pencil"></i>
-                    Update
-                </a>
-            {% endif %}
-
-            {% if app.user.id == consumer.user.id or is_granted('ROLE_ADMIN') %}
-                <form class="d-inline" method="post" action="{{ path('app_consumer_delete', {id: consumer.id}) }}">
-                    <button class="btn btn-danger" type="submit">
-                        <i class="bi bi-trash"></i>
-                        Delete account
-                    </button>
-                </form>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-4">
-            <h2>Information</h2>
-            <table class="table">
-                <tr>
-                    <th>First name</th>
-                    <td>{{ consumer.firstName }}</td>
-                </tr>
-                <tr>
-                    <th>Last name</th>
-                    <td>{{ consumer.lastName }}</td>
-                </tr>
-                <tr>
-                    <th>Phone number</th>
-                    <td>{{ consumer.phoneNumber }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-lg-4">
-            <div class="d-flex gap-4 align-items-center">
-                <h2>Orders</h2>
+            <div class="row">
+                <div class="col mx-auto">
+                    {% if is_granted("ROLE_CONSUMER") %}
+                        <h1>Hi, {{ consumer.firstName }}</h1>
+                    {% else %}
+                        <h1>Consumer</h1>
+                    {% endif %}
+                    <hr>
+                </div>
             </div>
-            {% for order in consumer.orders %}
-                <ul class="list-group mt-2">
-                    <li class="list-group-item">
-                        <div class="d-flex gap-2 align-items-center">
-                            <a href="{{ path('app_package_view', {id: order.package.id}) }}" class="flex-fill my-0">{{ order.package.name }}</a>
-                            <p class="my-0">{{ order.createdAt|date('H:i d/m') }}</p>
-                            {% if app.user.id == consumer.user.id or is_granted('ROLE_ADMIN')%}
-                                <button onclick="deleteOrder('{{ path('app_order_delete', {id: order.id}) }}')" class="btn btn-danger">Cancel</button>
-                            {% endif %}
+            <div class="row justify-content-center">
+                <div class="col">
+                    {% if app.user.id == consumer.user.id %}
+                        <a class="btn btn-secondary" href="{{ path('app_consumer_update', {id: consumer.id}) }}">
+                            <i class="bi bi-pencil"></i>
+                            Update
+                        </a>
+                    {% endif %}
+
+                    {% if app.user.id == consumer.user.id or is_granted('ROLE_ADMIN') %}
+                        <form class="d-inline" method="post" action="{{ path('app_consumer_delete', {id: consumer.id}) }}">
+                            <button class="btn btn-danger" type="submit">
+                                <i class="bi bi-trash"></i>
+                                Delete account
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col">
+                    <h2>Information</h2>
+                    <table class="table">
+                        <tr>
+                            <th>First name</th>
+                            <td>{{ consumer.firstName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last name</th>
+                            <td>{{ consumer.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone number</th>
+                            <td>{{ consumer.phoneNumber }}</td>
+                        </tr>
+                    </table>
+                </div>
+                {% if is_granted("ROLE_CONSUMER") %}
+                    <div class="col">
+                        <div class="d-flex gap-4 align-items-center">
+                            <h2>Orders</h2>
                         </div>
-                    </li>
-                </ul>
-            {% else %}
-                <p class="text-muted">No active orders.</p>
-            {% endfor %}
+                        {% for order in consumer.orders %}
+                            <ul class="list-group mt-2">
+                                <li class="list-group-item">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <a href="{{ path('app_package_view', {id: order.package.id}) }}" class="flex-fill my-0">{{ order.package.name }}</a>
+                                        <p class="my-0">{{ order.createdAt|date('H:i d/m') }}</p>
+                                        {% if app.user.id == consumer.user.id or is_granted('ROLE_ADMIN')%}
+                                            <button onclick="deleteOrder('{{ path('app_order_delete', {id: order.id}) }}')" class="btn btn-danger">Cancel</button>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No active orders.</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </main>
