@@ -10,11 +10,18 @@ use App\Entity\Category;
 use App\Entity\Consumer;
 use App\Entity\Order;
 use App\Entity\Package;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
+    }
+
     public function load(ObjectManager $manager): void
     {
         // --- Business Types ---
@@ -52,134 +59,167 @@ class AppFixtures extends Fixture
         $manager->persist($groceriesCategory);
 
         // --- Businesses ---
-        $business1 = new Business();
-        $business1->setName('Green Bistro');
-        $business1->setCity('Craiova');
-        $business1->setStreet('Calea Bucuresti');
-        $business1->setHouseNumber('12A');
-        $business1->setPhoneNumber('0740123456');
-        $business1->setBusinessType($restaurantType);
-        $manager->persist($business1);
+        $businesses = [];
 
-        $business2 = new Business();
-        $business2->setName('Sunrise Bakery');
-        $business2->setCity('Craiova');
-        $business2->setStreet('Str. Unirii');
-        $business2->setHouseNumber('5');
-        $business2->setPhoneNumber('0741987654');
-        $business2->setBusinessType($bakeryType);
-        $manager->persist($business2);
+        $businessData = [
+            ['Green Bistro', 'Craiova', 'Calea Bucuresti', '12A', '0740123456', $restaurantType],
+            ['Sunrise Bakery', 'Craiova', 'Str. Unirii', '5', '0741987654', $bakeryType],
+            ['Coffee Corner', 'Craiova', 'Str. Traian', '22', '0745112233', $cafeType],
+            ['Fresh Market', 'Craiova', 'Bd. Decebal', '101', '0746998877', $groceryType],
+            ['La Mama Trattoria', 'Craiova', 'Str. Brestei', '9', '0747556644', $restaurantType],
+        ];
 
-        $business3 = new Business();
-        $business3->setName('Coffee Corner');
-        $business3->setCity('Craiova');
-        $business3->setStreet('Str. Traian');
-        $business3->setHouseNumber('22');
-        $business3->setPhoneNumber('0745112233');
-        $business3->setBusinessType($cafeType);
-        $manager->persist($business3);
+        foreach ($businessData as $data) {
+            $business = new Business();
+            $business->setName($data[0]);
+            $business->setCity($data[1]);
+            $business->setStreet($data[2]);
+            $business->setHouseNumber($data[3]);
+            $business->setPhoneNumber($data[4]);
+            $business->setBusinessType($data[5]);
 
-        $business4 = new Business();
-        $business4->setName('Fresh Market');
-        $business4->setCity('Craiova');
-        $business4->setStreet('Bd. Decebal');
-        $business4->setHouseNumber('101');
-        $business4->setPhoneNumber('0746998877');
-        $business4->setBusinessType($groceryType);
-        $manager->persist($business4);
+            $manager->persist($business);
+            $businesses[] = $business;
+        }
 
-        $business5 = new Business();
-        $business5->setName('La Mama Trattoria');
-        $business5->setCity('Craiova');
-        $business5->setStreet('Str. Brestei');
-        $business5->setHouseNumber('9');
-        $business5->setPhoneNumber('0747556644');
-        $business5->setBusinessType($restaurantType);
-        $manager->persist($business5);
+        [
+            $business1,
+            $business2,
+            $business3,
+            $business4,
+            $business5
+        ] = $businesses;
 
         // --- Consumers ---
-        $consumer1 = new Consumer();
-        $consumer1->setFirstName('Andrei');
-        $consumer1->setLastName('Popescu');
-        $consumer1->setPhoneNumber('0722111222');
-        $manager->persist($consumer1);
+        $consumers = [];
 
-        $consumer2 = new Consumer();
-        $consumer2->setFirstName('Maria');
-        $consumer2->setLastName('Ionescu');
-        $consumer2->setPhoneNumber('0733444555');
-        $manager->persist($consumer2);
+        $consumerData = [
+            ['Andrei', 'Popescu', '0722111222'],
+            ['Maria', 'Ionescu', '0733444555'],
+            ['Ioana', 'Dumitrescu', '0744667788'],
+            ['Radu', 'Stanescu', '0755223344'],
+            ['Elena', 'Vasilescu', '0766778899'],
+            ['Cristian', 'Marin', '0777889900'],
+        ];
 
-        $consumer3 = new Consumer();
-        $consumer3->setFirstName('Ioana');
-        $consumer3->setLastName('Dumitrescu');
-        $consumer3->setPhoneNumber('0744667788');
-        $manager->persist($consumer3);
+        foreach ($consumerData as $data) {
+            $consumer = new Consumer();
+            $consumer->setFirstName($data[0]);
+            $consumer->setLastName($data[1]);
+            $consumer->setPhoneNumber($data[2]);
 
-        $consumer4 = new Consumer();
-        $consumer4->setFirstName('Radu');
-        $consumer4->setLastName('Stanescu');
-        $consumer4->setPhoneNumber('0755223344');
-        $manager->persist($consumer4);
+            $manager->persist($consumer);
+            $consumers[] = $consumer;
+        }
 
-        $consumer5 = new Consumer();
-        $consumer5->setFirstName('Elena');
-        $consumer5->setLastName('Vasilescu');
-        $consumer5->setPhoneNumber('0766778899');
-        $manager->persist($consumer5);
+        [
+            $consumer1,
+            $consumer2,
+            $consumer3,
+            $consumer4,
+            $consumer5,
+            $consumer6
+        ] = $consumers;
 
-        $consumer6 = new Consumer();
-        $consumer6->setFirstName('Cristian');
-        $consumer6->setLastName('Marin');
-        $consumer6->setPhoneNumber('0777889900');
-        $manager->persist($consumer6);
+        // --- Users ---
+        foreach ($consumers as $index => $consumer) {
+            $user = new User();
+            $user->setEmail('consumer' . ($index + 1) . '@example.com');
+            $user->setRoles(['ROLE_CONSUMER']);
+            $user->setPassword(
+                $this->passwordHasher->hashPassword($user, 'password123')
+            );
+            $user->setConsumer($consumer);
+
+            $manager->persist($user);
+        }
+
+        foreach ($businesses as $index => $business) {
+            $user = new User();
+            $user->setEmail('business' . ($index + 1) . '@example.com');
+            $user->setRoles(['ROLE_BUSINESS']);
+            $user->setPassword(
+                $this->passwordHasher->hashPassword($user, 'password123')
+            );
+            $user->setBusiness($business);
+
+            $manager->persist($user);
+        }
+
+        $adminUser = new User();
+        $adminUser->setEmail('admin@example.com');
+        $adminUser->setRoles(['ROLE_ADMIN']);
+        $adminUser->setPassword(
+            $this->passwordHasher->hashPassword($adminUser, 'password123')
+        );
+        $manager->persist($adminUser);
 
         // --- Packages ---
         $packagesData = [
-            ['name' => 'Surprise Lunch Box', 'description' => 'Leftover lunch dishes at a discounted price.', 'price' => 19.99, 'category' => $mealsCategory, 'business' => $business1],
-            ['name' => "Chef's Mystery Box", 'description' => "A mix of today's unsold specials.", 'price' => 24.00, 'category' => $mealsCategory, 'business' => $business1],
-            ['name' => 'Evening Dinner Bag', 'description' => 'End-of-day dinner portions, chef selection.', 'price' => 22.50, 'category' => $mealsCategory, 'business' => $business1],
-            ['name' => 'Pasta Special Box', 'description' => 'Unsold pasta dishes from lunch service.', 'price' => 18.00, 'category' => $mealsCategory, 'business' => $business1],
-            ['name' => 'End of Day Pastries', 'description' => "Assorted pastries from today's batch.", 'price' => 12.50, 'category' => $bakedGoodsCategory, 'business' => $business2],
-            ['name' => 'Bread Basket Deal', 'description' => 'Unsold artisan bread from the day.', 'price' => 9.99, 'category' => $bakedGoodsCategory, 'business' => $business2],
-            ['name' => 'Sweet Treats Box', 'description' => 'Mixed cookies, croissants and muffins.', 'price' => 14.00, 'category' => $dessertsCategory, 'business' => $business2],
-            ['name' => 'Cake Slice Bundle', 'description' => 'Leftover cake slices, various flavors.', 'price' => 11.00, 'category' => $dessertsCategory, 'business' => $business2],
-            ['name' => 'Coffee & Snack Box', 'description' => 'Pastry and coffee combo, end of day.', 'price' => 8.50, 'category' => $bakedGoodsCategory, 'business' => $business3],
-            ['name' => 'Sandwich Surprise', 'description' => "Today's unsold sandwiches, chef's pick.", 'price' => 10.50, 'category' => $mealsCategory, 'business' => $business3],
-            ['name' => 'Muffin Mix Bag', 'description' => 'Assorted muffins from the display case.', 'price' => 7.50, 'category' => $dessertsCategory, 'business' => $business3],
-            ['name' => 'Veggie Box Deal', 'description' => 'Assorted vegetables nearing best-by date.', 'price' => 15.00, 'category' => $groceriesCategory, 'business' => $business4],
-            ['name' => 'Fruit Rescue Box', 'description' => 'Fresh fruit close to expiry, mixed selection.', 'price' => 13.50, 'category' => $groceriesCategory, 'business' => $business4],
-            ['name' => 'Dairy Surprise Bag', 'description' => 'Dairy products nearing sell-by date.', 'price' => 16.00, 'category' => $groceriesCategory, 'business' => $business4],
-            ['name' => 'Pantry Essentials Box', 'description' => 'Mixed pantry items close to date.', 'price' => 20.00, 'category' => $groceriesCategory, 'business' => $business4],
-            ['name' => 'Trattoria Family Box', 'description' => 'Family-size portions from dinner service.', 'price' => 29.99, 'category' => $mealsCategory, 'business' => $business5],
-            ['name' => 'Antipasto Leftover Box', 'description' => 'Assorted antipasti from today.', 'price' => 17.50, 'category' => $mealsCategory, 'business' => $business5],
-            ['name' => 'Pizza Rescue Box', 'description' => 'Unsold pizza slices, mixed toppings.', 'price' => 16.50, 'category' => $mealsCategory, 'business' => $business5],
+            ['Surprise Lunch Box', 'Leftover lunch dishes at a discounted price.', 19.99, $mealsCategory, $business1],
+            ["Chef's Mystery Box", "A mix of today's unsold specials.", 24.00, $mealsCategory, $business1],
+            ['Evening Dinner Bag', 'End-of-day dinner portions, chef selection.', 22.50, $mealsCategory, $business1],
+            ['Pasta Special Box', 'Unsold pasta dishes from lunch service.', 18.00, $mealsCategory, $business1],
+
+            ['End of Day Pastries', "Assorted pastries from today's batch.", 12.50, $bakedGoodsCategory, $business2],
+            ['Bread Basket Deal', 'Unsold artisan bread from the day.', 9.99, $bakedGoodsCategory, $business2],
+            ['Sweet Treats Box', 'Mixed cookies, croissants and muffins.', 14.00, $dessertsCategory, $business2],
+            ['Cake Slice Bundle', 'Leftover cake slices, various flavors.', 11.00, $dessertsCategory, $business2],
+
+            ['Coffee & Snack Box', 'Pastry and coffee combo, end of day.', 8.50, $bakedGoodsCategory, $business3],
+            ['Sandwich Surprise', "Today's unsold sandwiches, chef's pick.", 10.50, $mealsCategory, $business3],
+            ['Muffin Mix Bag', 'Assorted muffins from the display case.', 7.50, $dessertsCategory, $business3],
+            ['Coffee Beans Bundle', 'Fresh coffee products nearing best before date.', 15.00, $groceriesCategory, $business3],
+
+            ['Veggie Box Deal', 'Assorted vegetables nearing best-by date.', 15.00, $groceriesCategory, $business4],
+            ['Fruit Rescue Box', 'Fresh fruit close to expiry, mixed selection.', 13.50, $groceriesCategory, $business4],
+            ['Dairy Surprise Bag', 'Dairy products nearing sell-by date.', 16.00, $groceriesCategory, $business4],
+            ['Pantry Essentials Box', 'Mixed pantry items close to date.', 20.00, $groceriesCategory, $business4],
+
+            ['Trattoria Family Box', 'Family-size portions from dinner service.', 29.99, $mealsCategory, $business5],
+            ['Antipasto Leftover Box', 'Assorted antipasti from today.', 17.50, $mealsCategory, $business5],
+            ['Pizza Rescue Box', 'Unsold pizza slices, mixed toppings.', 16.50, $mealsCategory, $business5],
+            ['Pasta Family Deal', 'Large pasta portions left from service.', 25.00, $mealsCategory, $business5],
         ];
 
         $packages = [];
+
         foreach ($packagesData as $data) {
             $package = new Package();
-            $package->setName($data['name']);
-            $package->setDescription($data['description']);
-            $package->setPrice($data['price']);
+            $package->setName($data[0]);
+            $package->setDescription($data[1]);
+            $package->setPrice($data[2]);
             $package->setPhoto(null);
             $package->setCreatedAt(new \DateTimeImmutable());
-            $package->setCategory($data['category']);
-            $package->setBusiness($data['business']);
+            $package->setCategory($data[3]);
+            $package->setBusiness($data[4]);
+
             $manager->persist($package);
             $packages[] = $package;
         }
 
         // --- Orders ---
-        // package_id is UNIQUE on order, so each package can be used in at most one order.
-        $consumers = [$consumer1, $consumer2, $consumer3, $consumer4, $consumer5, $consumer6];
+        // Only order some packages so most remain available.
+        shuffle($packages);
 
-        // Use 16 of the 18 packages for orders, cycling through consumers.
-        for ($i = 0; $i < 16; $i++) {
+        $consumerList = [
+            $consumer1,
+            $consumer2,
+            $consumer3,
+            $consumer4,
+            $consumer5,
+            $consumer6,
+        ];
+
+        // 6 sold packages, 14 available
+        for ($i = 0; $i < 6; $i++) {
             $order = new Order();
-            $order->setCreatedAt(new \DateTimeImmutable(sprintf('-%d hours', $i * 3)));
+            $order->setCreatedAt(
+                new \DateTimeImmutable(sprintf('-%d hours', $i * 5))
+            );
             $order->setPackage($packages[$i]);
-            $order->setConsumer($consumers[$i % count($consumers)]);
+            $order->setConsumer($consumerList[$i % count($consumerList)]);
+
             $manager->persist($order);
         }
 
