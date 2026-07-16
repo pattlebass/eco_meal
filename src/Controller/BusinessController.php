@@ -136,7 +136,9 @@ final class BusinessController extends AbstractController
         $package = new Package();
         $package->setBusiness($business);
         $package->setCreatedAt(new \DateTimeImmutable());
-        $form = $this->createForm(PackageFormType::class, $package);
+        $form = $this->createForm(PackageFormType::class, $package, [
+            'business' => $business,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -165,7 +167,9 @@ final class BusinessController extends AbstractController
     {
         $package = $entityManager->getRepository(Package::class)->find($packageId);
         $package->setCreatedAt(new \DateTimeImmutable());
-        $form = $this->createForm(PackageFormType::class, $package);
+        $form = $this->createForm(PackageFormType::class, $package, [
+            'business' => $business,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
